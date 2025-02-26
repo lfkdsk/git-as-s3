@@ -17,7 +17,7 @@ const logger = winston.createLogger({
 
 // Initialize GitHub API client
 const octokit = new Octokit({
-  auth: process.env.GITHUB_TOKEN
+  auth: process.env.TOKEN_GITHUB
 });
 
 // Parse bucket name to get owner and repo
@@ -72,7 +72,7 @@ router.get('/:bucket/*', async (req, res) => {
           renderOpts: { pretty: true, indent: '  ', newline: '\n' },
           xmldec: { version: '1.0', encoding: 'UTF-8' }
         });
-        
+
         res.set('Content-Type', 'application/xml');
         res.status(200).send(
           builder.buildObject(result)

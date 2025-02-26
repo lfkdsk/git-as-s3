@@ -25,7 +25,7 @@ jobs:
       - name: Run tests
         run: npm test
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TOKEN_GITHUB: ${{ secrets.TOKEN_GITHUB }}
 
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v25

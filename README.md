@@ -27,7 +27,7 @@ A GitHub repository proxy service that provides S3-compatible API, allowing you 
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/git-as-s3.git
+git clone https://github.com/lfkdsk/git-as-s3.git
 cd git-as-s3
 ```
 
@@ -39,7 +39,7 @@ npm install
 3. Configure environment variables:
 Copy the `.env.example` file to `.env` and set the following environment variables:
 ```
-GITHUB_TOKEN=your_github_token_here
+TOKEN_GITHUB=your_TOKEN_GITHUB_here
 PORT=3000
 ```
 
