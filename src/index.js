@@ -32,7 +32,7 @@ app.use(express.raw({ type: '*/*', limit: '10mb' }));
 
 app.get('/', async (req, res) => {
   res.status(200).json({
-    token: process.env.TOKEN_GITHUB,
+    token: process.env.TOKEN_GITHUB !== undefined ? 'defined' : 'undefined',
   });
 });
 
@@ -44,7 +44,7 @@ app.get('/health', async (req, res) => {
     res.status(200).json({
       status: 'healthy',
       github_connection: 'connected',
-      token: process.env.TOKEN_GITHUB,
+      token: process.env.TOKEN_GITHUB !== undefined ? 'defined' : 'undefined',
     });
   } catch (error) {
     res.status(200).json({
