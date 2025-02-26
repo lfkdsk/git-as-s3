@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js --watch src",
-    "test": "jest"
+    "test": "node src/test-s3-compatibility.js"
   },
   "keywords": [
     "github",
