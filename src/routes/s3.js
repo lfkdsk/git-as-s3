@@ -89,19 +89,47 @@ router.get('/:bucket/*', async (req, res) => {
       return;
     }
 
-    // Handle file content
-    const content = Buffer.from(response.data.content, 'base64');
-    res.setHeader('Content-Type', 'application/octet-stream');
-    res.setHeader('Content-Length', content.length);
-    res.setHeader('ETag', `"${response.data.sha}"`);
-    res.send(content);
-
-    logger.info(`GET request processed successfully: ${req.path}`, {
-      owner,
-      repo,
-      size: content.length,
-      processingTime: Date.now() - startTime
-    });
+    if (response.data.content.length !== 0) {
+      // Handle file content
+      const content = Buffer.from(response.data.content, 'base64');
+      res.setHeader('Content-Type', 'application/octet-stream');
+      res.setHeader('Content-Length', content.length);
+      res.setHeader('ETag', `"${response.data.sha}"`);
+      res.send(content);
+      logger.info(`GET request processed successfully: ${req.path}`, {
+        owner,
+        repo,
+        size: content.length,
+        processingTime: Date.now() - startTime
+      });
+    } else {
+      const downloadUrl = response.data.download_url;
+      if (!downloadUrl) {
+        return res.status(404).send('Content not available');
+      }
+      
+      // Fetch the content from the download URL
+      const fetchResponse = await fetch(downloadUrl);
+      
+      if (!fetchResponse.ok) {
+        return res.status(fetchResponse.status).send('Failed to fetch content from GitHub');
+      }
+      
+      // Get the binary data
+      const arrayBuffer = await fetchResponse.arrayBuffer();
+      const content = Buffer.from(arrayBuffer, 'base64');
+      res.setHeader('Content-Type', 'application/octet-stream');
+      res.setHeader('Content-Length', content.length);
+      res.setHeader('ETag', `"${response.data.sha}"`);
+      // Send the file data
+      res.send(content);
+      logger.info(`GET request with download ${downloadUrl} successfully: ${req.path}`, {
+        owner,
+        repo,
+        size: content.length,
+        processingTime: Date.now() - startTime
+      });
+    }
   } catch (error) {
     logger.error(`error GET request:`, {
       error: error.message,
