@@ -1,4 +1,7 @@
-require('dotenv').config();
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
+
 const express = require('express');
 const cors = require('cors');
 const winston = require('winston');
@@ -27,6 +30,12 @@ app.use(cors());
 app.use(express.json());
 app.use(express.raw({ type: '*/*', limit: '10mb' }));
 
+app.get('/', async (req, res) => {
+  res.status(200).json({
+    token: process.env.TOKEN_GITHUB,
+  });
+});
+
 // Health check endpoint
 app.get('/health', async (req, res) => {
   try {
@@ -34,7 +43,8 @@ app.get('/health', async (req, res) => {
     await octokit.rest.users.getAuthenticated();
     res.status(200).json({
       status: 'healthy',
-      github_connection: 'connected'
+      github_connection: 'connected',
+      token: process.env.TOKEN_GITHUB,
     });
   } catch (error) {
     res.status(200).json({
