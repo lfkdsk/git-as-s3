@@ -6,7 +6,10 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js --watch src",
-    "test": "node src/test-s3-compatibility.js"
+    "test": "node src/test-s3-compatibility.js",
+    "build": "npm ci",
+    "vercel-build": "npm run build",
+    "clean": "rm -rf public"
   },
   "keywords": [
     "github",
